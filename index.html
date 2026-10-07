@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0c1423">
+  <title>運動心率｜四機台即時監測</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fb7185' d='M12 21S1 14 1 7a6 6 0 0 1 11-3A6 6 0 0 1 23 7c0 7-11 14-11 14'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./assets/style.css">
+  <script defer src="./assets/vendor/chart.umd.min.js"></script>
+  <script type="module" src="./assets/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-symbol" aria-hidden="true">♥</span><div><strong>運動心率</strong><span>四機台即時監測</span></div></div>
+    <nav class="top-actions" aria-label="主要功能"><span id="environmentBadge" class="pill">檢查藍牙環境</span><a href="#historySection" class="text-link">運動紀錄 <span id="historyCount">0</span></a><button id="helpBtn" class="icon-button" aria-label="使用說明">?</button></nav>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="pageTitle"><div><div class="eyebrow"><span class="tiny-dot"></span> 即時運動面板</div><h1 id="pageTitle">每一次心跳，都看得見。</h1><p>四台機台，獨立連線與紀錄。專注運動，掌握當下。</p></div><div class="mode-switch" role="group" aria-label="資料來源"><button id="bleModeBtn" class="selected" aria-pressed="true">藍牙即時</button><button id="demoModeBtn" aria-pressed="false">展示模式</button></div></section>
+    <div id="systemAlerts" class="alerts" aria-live="polite"></div>
+    <div id="demoNotice" class="notice demo-notice" hidden><span><strong>展示模式</strong> · 四路資料均為模擬心率，紀錄與匯出也會標示「模擬」。</span><span>每秒更新</span></div>
+    <section id="devicesContainer" class="device-grid" aria-label="四機台心率"></section>
+    <section class="panel trend-panel" aria-labelledby="trendTitle">
+      <div class="section-head"><div><div class="eyebrow">LIVE TREND</div><h2 id="trendTitle">即時心率趨勢</h2><p>最近 60 秒 · 中斷與無有效讀值的區段保留空白</p></div><button id="clearChartBtn" class="button subtle">清除圖表</button></div>
+      <div id="chartLegend" class="chart-legend"></div>
+      <div class="chart-wrap"><canvas id="heartRateChart" aria-label="四機台最近60秒心率曲線" role="img"></canvas><p id="chartError" class="chart-error" hidden>圖表無法載入，心率讀取與紀錄仍可使用。</p></div>
+      <div class="panel-footer"><span><i class="tiny-dot"></i><span id="liveCount">0</span> / 4 個機台有即時數據</span><span>紀錄僅儲存於此瀏覽器</span></div>
+    </section>
+    <section id="historySection" class="panel history-panel" aria-labelledby="historyTitle"><div class="section-head"><div><div class="eyebrow">YOUR SESSIONS</div><h2 id="historyTitle">運動紀錄</h2><p>每次運動獨立保存，可查看詳情或匯出 CSV。</p></div><button id="refreshHistoryBtn" class="button subtle">重新整理紀錄</button></div><div id="historyList" aria-live="polite"><div class="empty-state">正在讀取本機紀錄…</div></div></section>
+    <footer class="site-footer"><span>運動心率 <span class="footer-dot">·</span> 本機藍牙監測</span><span>資料保存在目前的瀏覽器；清除網站資料會一併移除紀錄。</span></footer>
+  </main>
+  <dialog id="detailDialog" class="detail-dialog"><div class="dialog-head"><div><div class="eyebrow">SESSION DETAIL</div><h2 id="detailTitle">運動紀錄</h2></div><button class="close-dialog icon-button" aria-label="關閉紀錄詳情">×</button></div><div id="detailMeta"></div><div id="detailStats" class="detail-stats"></div><div class="chart-wrap history-chart"><canvas id="historyChart" aria-label="所選紀錄的心率曲線" role="img"></canvas><p id="historyChartError" class="chart-error" hidden>圖表無法載入，仍可匯出完整紀錄。</p></div><p id="detailEmpty" class="muted"></p><div class="dialog-actions"><button id="detailDeleteBtn" class="button danger-outline">刪除此紀錄</button><button id="detailExportBtn" class="button primary">匯出 CSV</button></div></dialog>
+  <dialog id="helpDialog" class="help-dialog"><div class="dialog-head"><h2>開始你的心率監測</h2><button class="close-dialog icon-button" aria-label="關閉使用說明">×</button></div><ol class="help-steps"><li><strong>開啟手錶的心率廣播</strong><p>裝置須提供標準 BLE 心率服務。僅開啟手錶藍牙，不一定會廣播心率。</p></li><li><strong>為每個機台選擇一支手錶</strong><p>點擊「搜尋並連線」，在瀏覽器選擇裝置。最多四支，同一支手錶只能分配給一個機台。</p></li><li><strong>開始紀錄</strong><p>看到心率後，點擊該機台的「開始紀錄」。停止紀錄後仍會顯示即時心率；「清除圖表」不會刪除紀錄。</p></li><li><strong>查看或匯出</strong><p>在下方查看歷史紀錄。重新開啟網頁會保留已存資料，未結束的紀錄會標示中斷。</p></li></ol><div class="help-note">請透過 GitHub Pages 的 HTTPS 網址，或本機 <code>http://localhost:8000</code> 開啟。樹莓派 Chromium 若未提供 Web Bluetooth，請確認版本與實驗性網頁平台功能設定。無手錶時可先切換「展示模式」。</div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <noscript><p class="notice">請啟用 JavaScript 才能使用藍牙心率功能。</p></noscript>
+  <script>
+    if (location.protocol === 'file:') {
+      document.getElementById('systemAlerts').innerHTML = '<div class="notice">請先執行專案中的 start.bat（Windows）或 sh start.sh（樹莓派），再以瀏覽器開啟 http://localhost:8000。</div>';
+      document.getElementById('historyList').textContent = '從本機網址開啟後，即可使用心率監測與運動紀錄。';
+    }
+  </script>
+</body>
+</html>

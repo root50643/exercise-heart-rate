@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>運動心率｜前往首頁</title>
+  <script>
+    const target = new URL('./index.html', location.href);
+    target.search = location.search;
+    target.hash = location.hash;
+    location.replace(target.href);
+  </script>
+</head>
+<body>
+  <p>運動心率首頁已移至 <a href="./index.html">index.html</a>。</p>
+  <noscript><p>請點擊上方連結並啟用 JavaScript，以使用藍牙心率功能。</p></noscript>
+</body>
+</html>
